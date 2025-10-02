@@ -21,7 +21,9 @@ from .model import PTJPLSM
 
 logger = logging.getLogger(__name__)
 
-def generate_PTJPLSM_table_inputs(PTJPL_inputs_from_calval_df: DataFrame) -> DataFrame:
+def generate_PTJPLSM_table_inputs(
+        PTJPL_inputs_from_calval_df: DataFrame,
+        keep_source_columns: bool = False) -> DataFrame:
     """
     Generate a DataFrame with all required inputs for the PT-JPL-SM model.
 
@@ -200,4 +202,29 @@ def generate_PTJPLSM_table_inputs(PTJPL_inputs_from_calval_df: DataFrame) -> Dat
     if "Ta" in PTJPL_inputs_df and "Ta_C" not in PTJPL_inputs_df:
         PTJPL_inputs_df.rename({"Ta": "Ta_C"}, inplace=True)
     
+    if not keep_source_columns:
+        columns = [
+            "tower",
+            "lat",
+            "lon",
+            "time_UTC",
+            "albedo",
+            "elevation_km",
+            "hour_of_day",
+            "doy",
+            "Topt_C",
+            "fAPARmax",
+            "field_capacity",
+            "wilting_point",
+            "canopy_height_meters",
+            "Ta_C",
+            "NDVI",
+            "ST_C",
+            "RH",
+            "SM",
+            "geometry"
+        ]
+        
+        PTJPL_inputs_df = PTJPL_inputs_df[columns]
+
     return PTJPL_inputs_df
